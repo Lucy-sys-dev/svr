@@ -22,14 +22,14 @@ import javax.servlet.http.HttpServletRequest
  **/
 @RestController
 @RequestMapping(
-	path = ["/${API_VERSION}/${SHOP_PATH}/${PRODUCT_PATH}"]
+	path = ["/${API_VERSION}/${SHOP_PATH}/{shopId}/${PRODUCT_PATH}"]
 )
 class ProductController {
 	@Autowired
 	private lateinit var productService: ProductService
 
 	@GetMapping(
-		path = ["/$SERVICE_PATH/{shopId}"],
+		path = ["/$SERVICE_PATH"],
 		produces = [APPLICATION_JSON_VALUE])
 	fun getServiceProduct(
 		servlet: HttpServletRequest,
@@ -53,6 +53,22 @@ class ProductController {
 		servlet: HttpServletRequest,
 		@RequestBody request: ServiceAppointmentRequest
 	) = ResponseEntity.status(OK).body(productService.checkServiceAppointment(servlet, request))
+
+	@GetMapping(
+		path = ["/$SERVICE_PATH/$APPOINTMENT_PATH"],
+		produces = [APPLICATION_JSON_VALUE])
+	fun getServiceAppointmentByShop(
+		servlet: HttpServletRequest,
+		@PathVariable("shopId") shopId: Long
+	) = ResponseEntity.status(OK).body(productService.getServiceAppointmentByShopId(servlet, shopId))
+
+	@GetMapping(
+		path = ["/$SERVICE_PATH/$APPOINTMENT_PATH/{appointmentId}"],
+		produces = [APPLICATION_JSON_VALUE])
+	fun getServiceAppointmentById(
+		servlet: HttpServletRequest,
+		@PathVariable("appointmentId") appointmentId: Long
+	) = ResponseEntity.status(OK).body(productService.getServiceAppointmentById(servlet, appointmentId))
 
 	@PostMapping(
 		path = ["/$SERVICE_PATH/$APPOINTMENT_PATH"],

@@ -25,6 +25,9 @@ interface ServiceProductSaleRepository: JpaRepository<ServiceProductSale, Long> 
 
 @Repository
 interface ServiceAppointmentRepository: JpaRepository<ServiceAppointment, Long> {
+	fun findServiceAppointmentsById(id: Long) : ServiceAppointment?
+	fun findServiceAppointmentsByShopId(shopId: Long) : List<ServiceAppointment>
+
 	fun findServiceAppointmentsByShopIdAndEmployeeIdAndStartDateBetween(
 		shopId: Long, employeeId: Long, startDate: LocalDateTime, endDate: LocalDateTime) : List<ServiceAppointment>
 

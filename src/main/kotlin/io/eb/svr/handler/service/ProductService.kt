@@ -99,6 +99,24 @@ class ProductService {
 	}
 
 	@Throws(CustomException::class)
+	fun getServiceAppointmentByShopId(servlet: HttpServletRequest, shopId: Long) : List<ServiceAppointment> {
+		val serviceAppointments = serviceAppointmentRepository.findServiceAppointmentsByShopId(shopId)
+
+		serviceAppointments.asSequence().forEach {
+			it.statusDesc = it.status.desc
+		}
+
+		return serviceAppointments
+	}
+
+	@Throws(CustomException::class)
+	fun getServiceAppointmentById(servlet: HttpServletRequest, appointmentId: Long) : ServiceAppointment? {
+		return serviceAppointmentRepository.findServiceAppointmentsById(appointmentId)?.apply {
+			statusDesc = status.desc
+		}
+	}
+
+	@Throws(CustomException::class)
 	fun createServiceProductRender(servlet: HttpServletRequest, request: ServiceAppointmentRequest) = with(request) {
 		// 예약 가능 시술 확인
 		shopService.searchShopById(shopId).let { shop ->

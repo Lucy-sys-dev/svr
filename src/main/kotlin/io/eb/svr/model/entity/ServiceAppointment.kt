@@ -42,7 +42,8 @@ data class ServiceAppointment (
 	@Column(name="product_id", nullable=false, insertable = true, updatable = false)
 	var productId: Long,
 
-	@Enumerated(EnumType.STRING)
+//	@Enumerated(EnumType.STRING)
+	@Convert(converter = ServiceAppointmentStatusConverter::class)
 	@Column(name="status", nullable = false, unique = false)
 	var status: ServiceAppointmentStatus,
 
@@ -55,8 +56,22 @@ data class ServiceAppointment (
 	var endDate: LocalDateTime,
 
 	@Column(name = "duration", nullable=false, insertable = true, updatable = true)
-	var duration: Long
+	var duration: Long,
+
+	@Transient
+	var statusDesc: String? = null
 ): Auditable(), Serializable {
 
+	@OneToOne
+	@JoinColumn(name = "customer_id", referencedColumnName="id", insertable = false, updatable = false)
+	var customer: User? = null
+
+	@OneToOne
+	@JoinColumn(name = "employee_id", referencedColumnName="id", insertable = false, updatable = false)
+	var employee: User? = null
+
+	@OneToOne
+	@JoinColumn(name = "product_id", referencedColumnName="id", insertable = false, updatable = false)
+	var product: ServiceProduct? = null
 }
 
